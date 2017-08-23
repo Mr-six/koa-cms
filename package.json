@@ -16,8 +16,12 @@
     "koa-bodyparser": "^4.2.0",
     "koa-cors": "^0.0.16",
     "koa-jwt": "^3.2.2",
+    "koa-log4": "^2.2.1",
     "koa-router": "^7.2.1",
-    "mongoose": "^4.11.7",
+    "moment": "^2.18.1",
+    "mongoose": "^4.11.7"
+  },
+  "devDependencies": {
     "nodemon": "^1.11.0"
   }
 }
