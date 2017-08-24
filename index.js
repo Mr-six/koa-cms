@@ -3,7 +3,6 @@
  */
 const Koa        = require('koa')
 const bodypaser  = require('koa-bodyparser')
-const jwt        = require('koa-jwt')
 const cors       = require('koa-cors')
 const routers    = require('./routers')
 /**

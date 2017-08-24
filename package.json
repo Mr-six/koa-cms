@@ -12,6 +12,7 @@
   "author": "mrsix",
   "license": "MIT",
   "dependencies": {
+    "joi": "^10.6.0",
     "koa": "^2.3.0",
     "koa-bodyparser": "^4.2.0",
     "koa-cors": "^0.0.16",

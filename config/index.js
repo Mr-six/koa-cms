@@ -1,10 +1,14 @@
 const isProd =  process.env.NODE_ENV === 'production'
-const log = require('./log')
+const log = require('./log')                // 日志配置文件
+const schema = require('./schema')          // 验证规则
+
 module.exports = {
-    isProd,
-    secret: 'yqqlmgsycl',
-    port: isProd ? '3000' : '3000',
-    db: 'mongodb://127.0.0.1:27017/koams',
-    dbtest: 'mongodb://127.0.0.1:27017/test',
-    log, 
+  isProd,                                   // 判断当前环境
+  secret: 'yqqlmgsycl',                     // jwt secret
+  tokenExpires: '7d',                       // token 有效时间 7天
+  port: isProd ? '3000' : '3000',           // 端口
+  db: 'mongodb://127.0.0.1:27017/koams',    // 数据库
+  dbtest: 'mongodb://127.0.0.1:27017/test', // 测试数据库
+  log,                                      // 日志配置文件
+  schema,                                   // 对象验证规则
 }

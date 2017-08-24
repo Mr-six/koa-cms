@@ -24,12 +24,12 @@ const User = new Base('User', {
   sign:         String,
   code:         String,
   password:     String,
-  permission:   { type: Array, default: ['unset'] },
+  permission:   { type: Number, default: 1 },
   status:       { type: Number, default: -1 },
   nickname: {
     type:    String,
     index:   true,
-    default: '用户' + Math.random().toString(36).substring(20),
+    default: '用户' + Math.random().toString(36).substring(2),
   },
   email: {
     addr:   String,

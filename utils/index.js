@@ -1,11 +1,13 @@
 const log4js = require('koa-log4')
 const moment = require('moment')
 const crypto = require('crypto')
+const joi    = require('joi')
 
 const logger = log4js.getLogger('debug')
 logger.setLevel('auto')
 
 module.exports           = logger
+module.exports.joi       = joi
 module.exports.logAccess = log4js.connectLogger(log4js.getLogger('access'), {
   level: 'auto'
 })
@@ -23,7 +25,7 @@ module.exports.trimStr = function (str) {
 }
 
 module.exports.inviteCode = function () {
-  return Math.random().toString(36).substring(20) // ?
+  return Math.random().toString(36).substring(2) // ?
 }
 
 /**
@@ -33,7 +35,7 @@ module.exports.inviteCode = function () {
  * @param   code    Error Code (default: 0)
  * @param   status  Status Code (default: 200)
  */
-module.exports.result = function (res, data, msg, status) {
+module.exports.result = function (ctx, data, msg, status) {
   let redata = {}
   if (typeof data === 'string' ||
     data === 'null' ||
@@ -51,7 +53,9 @@ module.exports.result = function (res, data, msg, status) {
       data: data
     }
   }
-  res.status(status).send(redata)
+  ctx.status = status
+  ctx.body = redata
+  // ctx.status(status).send(redata)
 }
 
 module.exports.isTrue = function (value) {
