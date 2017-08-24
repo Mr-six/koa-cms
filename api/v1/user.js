@@ -64,7 +64,10 @@ userApi.methods.login = async function (ctx, next) {
 userApi.methods.resetPassword = async function (ctx, next) {
   let body = ctx.request.body
   const { error, value } = $.joi.validate(body, schema.user)
-  if (error) return $.result(ctx, 'params error')
+  if (error) {
+    $.error(error)
+    return $.result(ctx, 'params error')
+  }
 
   if ($.isEmpty(body.old) || $.isEmpty(body.new)) return $.result(ctx, 'params error')
   if (body.old === body.new) return $.result(ctx, 'same password')
