@@ -35,7 +35,7 @@ mongoDB:latest node:latest
 ### 目录结构
 ```
 |-- api               # 主要接口文件
-|    |-- v１　　　　　　# 第一版本
+|    |-- v１          # 第一版本
 |       |-- base.js 　# 基础类
 |       |-- index.js　# 入口文件
 |       |-- user.js 　# 用户接口文件
