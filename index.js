@@ -5,6 +5,8 @@ const Koa        = require('koa')
 const bodypaser  = require('koa-bodyparser')
 const cors       = require('koa-cors')
 const routers    = require('./routers')
+const static     = require('koa-static')
+const path       = require('path')
 /**
  * app instance
  */
@@ -20,8 +22,12 @@ require('./models').connect()
 /**
  * middleware
  */
-app.use(bodypaser())
+app.use(bodypaser({
+  formLimit: '10mb'
+}))
 app.use(cors())
+const staticPath = './static'  // 静态文件目录
+app.use(static(path.join( __dirname, staticPath)))
 
 /**
  * routers

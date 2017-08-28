@@ -2,6 +2,18 @@ const Router       = require('koa-router')
 const {userApi}  = require('../api').v1
 const user         = new Router()
 
+// {
+// 	"phone": {
+// 		"number": "13200000000",
+// 		"hidden": true
+// 	},
+// 	"email": {
+// 		"addr": "ji@ji.com"
+// 	},
+// 	"password": "000000000",
+// 	"nickname": "test"
+// }
+
 /**
  * 登录逻辑
  */

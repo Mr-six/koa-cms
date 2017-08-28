@@ -1,21 +1,30 @@
-const Router = require('koa-router')
+const Router  = require('koa-router')
 
-const router = new Router()
+const router  = new Router()
 
-const user = require('./user')
+const user    = require('./user')
 
-router.get('/', (ctx) => {
-    // ctx.type = 'json'
-    ctx.body = 'index'
-})
-router.post('/',(ctx) => {
-    let body = ctx.request.body
-    console.log(body)
-    ctx.body = 'body'
-})
+const article = require('./article')
+
+const upload  = require('./upload')
+
+const debug   = require('./debug')
+
 /**
  * user router
  */
 router.use('/user', user.routes(), user.allowedMethods())
+
+/**
+ * article router
+ */
+router.use('/article', article.routes(), article.allowedMethods())
+
+/**
+ * upload router
+ */
+router.use('/upload', upload.routes(), upload.allowedMethods())
+
+router.use('/debug', debug.routes(), debug.allowedMethods())
 
 module.exports = router

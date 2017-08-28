@@ -15,18 +15,25 @@ const userApi     = new Base({
 // 3 创建用户
 // 4 根据用户 id 更新 token, 返回用户信息
 // TODO 添加手机或邮箱重复检测
+// 验证token 是否过期 更新
 userApi.methods.create = async function (ctx, next) {
   let body = ctx.request.body
   const { error, value } = $.joi.validate(body, schema.user)  // 验证body对象
   $.debug(error)
   if (error) return $.result(ctx, 'params error')
+
+  // 判断邮箱或者手机是否已经存在
+  let existE  = await userModel.find({ "email.addr": body.email.addr })
+  let existP  = await userModel.find({ "phone.number": body.phone.number })
+  let exist   = $.isEmpty(existE) || $.isEmpty(existP)
+  if (exist) return $.result(ctx, 'account already exist!')
   
+  // 创建账户
   const query = Object.assign({code: $.inviteCode()}, body)
-  query.email = JSON.parse(query.email)
-  query.phone = JSON.parse(query.phone)
   $.info(query)
   let user    = await userModel.create(query)
 
+  // 生成token
   $.debug(user)
   const token = auth.createToken({user: user._id, permission: user.permission})
   user        = await userModel.update({_id: user._id}, { token: token })
@@ -35,7 +42,7 @@ userApi.methods.create = async function (ctx, next) {
 
 // 登录验证 email和密码
 // TODO 密码未做加密处理
-userApi.methods.login = async function (ctx, next) {
+userApi.methods.login    = async function (ctx, next) {
   let body = ctx.request.body
   $.debug(body)
   const { error, value } = $.joi.validate(body, schema.user)
@@ -46,6 +53,8 @@ userApi.methods.login = async function (ctx, next) {
   }
   let documents = await userModel.find({ "email.addr": value.email.addr, "password": value.password })
   if ($.isEmpty(documents)) return $.result(ctx, 'login failed')
+  // token是否过期
+  let {token} = documents
   $.result(ctx, documents)
 }
 

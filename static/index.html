@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <!-- 引入样式 -->
+  <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-default/index.css">
+  <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.js"></script>
+  
+</head>
+<body>
+  <div id="app">
+    <el-button @click="post">按钮</el-button>
+    <el-dialog v-model="visible" title="Hello world">
+      <p>欢迎使用 Element</p>
+    </el-dialog>
+  </div>
+
+  <div class="debug">
+  <div id="result">
+    <div id="content"></div>
+  </div>
+  </div>
+</body>
+  <!-- 先引入 Vue -->
+  <script src="https://unpkg.com/vue/dist/vue.js"></script>
+  <!-- 引入组件库 -->
+  <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+  <script>
+    new Vue({
+      el: '#app',
+      data: function() {
+        return { visible: false }
+      },
+      methods: {
+        post () {
+            console.log('dianji')
+           let o =  { 
+                nickname: 'test',
+                password: '111we812',
+                email: {"addr": "2131@qq.com", "hidden": true},
+                phone: {"number": "13200000000"},
+                old: ''
+             }
+            let post = 'tes.md'
+
+            $.post( '/upload', o, 
+                function( data ) {
+                    var content = $( data ).find( '#content' )
+                    $( "#result" ).append( content )
+                }
+            )
+        }
+      }
+    })
+  </script>
+</html>

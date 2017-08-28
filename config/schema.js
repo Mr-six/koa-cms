@@ -20,6 +20,22 @@ const user  = $.joi.object().keys({
   nickname: $.joi.string().min(3).max(30),
 })
 
+/**
+ * 文章信息验证
+ */
+const article = $.joi.object().keys({
+  title:     $.joi.string(),
+  user:      $.joi.string(),
+  content:   $.joi.string().empty(''),
+  markdown:  $.joi.string().empty(''),
+  html:      $.joi.string().empty(''),
+  subTitle:  $.joi.string().empty(''),
+  headerImg: $.joi.string().empty(''),
+  status:    $.joi.string(),
+  sendAt:    $.joi.date().empty(''),
+})
+
 module.exports = {
   user,
+  article,
 }
