@@ -1,24 +1,35 @@
-const multer = require('koa-router-multer')
-// const diskStorage = '../../static/'
+const multer  = require('koa-multer')
+const path    = require('path')
+const config  = require('../../config')
+const $       = require('../../utils')
+
+/**
+ * TODO
+ * 1.增加文件分类存放
+ * 2.文件md5验重
+ * 3.cdn上传
+ * 4.文件管理功能
+ */
 const storage = multer.diskStorage({
+  // 配置存放目录
   destination: function (ctx, file, cb) {
-    cb(null, 'static/uploads/')
+    const upPath = path.join(config.static, '/upload')
+    console.log(upPath)
+    cb(null, upPath)
   },
   filename: function (ctx, file, cb) {
-    cb(null, file.fieldname + '-' + Date.now())
+    cb(null, file.originalname)
   }
 })
 
-// const upload = multer({ storage: storage })
-const upload = multer({ dest: 'static/uploads/' })
+const upload = multer({ storage: storage })
 
-upload.pic = async function (ctx, next) {
+upload.file = async function (ctx, next) {
     var file = ctx.req.file
     if (file != null) {
-        console.dir(file)
-        ctx.body = file
+        ctx.body = 'upload succeed'
     } else {
-        console.log('No upload file!')
+        $.info('No upload file!')
         ctx.body = 'false'
     }
 }

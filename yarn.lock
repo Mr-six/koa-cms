@@ -946,12 +946,6 @@ koa-multer@^1.0.2:
   dependencies:
     multer "1.3.0"
 
-koa-router-multer@^1.3.0:
-  version "1.3.0"
-  resolved "http://registry.npm.taobao.org/koa-router-multer/download/koa-router-multer-1.3.0.tgz#beec94f1f741edcb9b44029bd2ea734b5eb9512c"
-  dependencies:
-    multer "^1.3.0"
-
 koa-router@^7.2.1:
   version "7.2.1"
   resolved "http://registry.npm.taobao.org/koa-router/download/koa-router-7.2.1.tgz#b40a4ab3c6adb4b40895debd00a9c640304e3039"
@@ -1219,7 +1213,7 @@ ms@2.0.0, ms@^2.0.0:
   version "2.0.0"
   resolved "http://registry.npm.taobao.org/ms/download/ms-2.0.0.tgz#5608aeadfc00be6c2901df5f9861788de0d597c8"
 
-multer@1.3.0, multer@^1.3.0:
+multer@1.3.0:
   version "1.3.0"
   resolved "http://registry.npm.taobao.org/multer/download/multer-1.3.0.tgz#092b2670f6846fa4914965efc8cf94c20fec6cd2"
   dependencies:

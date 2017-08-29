@@ -1,8 +1,9 @@
-const Base        = require('./base')
-const {userModel} = require('../../models').v1
-const $           = require('../../utils')
-const auth        = require('../../utils/auth')
-const {schema}    = require('../../config')
+const Base           = require('./base')
+const {userModel}    = require('../../models').v1
+const $              = require('../../utils')
+const auth           = require('../../utils/auth')
+const {schema}       = require('../../config')
+const {tokenPromise, createToken} = require('../../utils/auth')
 
 const userApi     = new Base({
   model: userModel,
@@ -14,8 +15,6 @@ const userApi     = new Base({
 // 2 验证 post body 的合法性
 // 3 创建用户
 // 4 根据用户 id 更新 token, 返回用户信息
-// TODO 添加手机或邮箱重复检测
-// 验证token 是否过期 更新
 userApi.methods.create = async function (ctx, next) {
   let body = ctx.request.body
   const { error, value } = $.joi.validate(body, schema.user)  // 验证body对象
@@ -41,7 +40,9 @@ userApi.methods.create = async function (ctx, next) {
 }
 
 // 登录验证 email和密码
-// TODO 密码未做加密处理
+// TODO
+// 密码未做加密处理
+
 userApi.methods.login    = async function (ctx, next) {
   let body = ctx.request.body
   $.debug(body)
@@ -51,10 +52,20 @@ userApi.methods.login    = async function (ctx, next) {
     $.error(error)
     return $.result(ctx, 'params error')
   }
+
   let documents = await userModel.find({ "email.addr": value.email.addr, "password": value.password })
   if ($.isEmpty(documents)) return $.result(ctx, 'login failed')
+
   // token是否过期
   let {token} = documents
+  try {
+    const decode = await tokenPromise(token)
+  } catch (e) {  // 生成新token
+    $.info('get new token')
+    token = auth.createToken({user: documents._id, permission: documents.permission})
+  }
+  documents = await userModel.update({_id: documents._id}, { token: token })
+  if ($.isEmpty(documents)) return $.result(ctx, 'login failed')
   $.result(ctx, documents)
 }
 

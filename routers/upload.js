@@ -5,6 +5,6 @@ const upload      = new Router()
 upload.get('/', (ctx) => {
     ctx.body = 'upload'
 })
-upload.post('/', uploadApi.single(''), uploadApi.pic)
+upload.post('/', uploadApi.single('file'), uploadApi.file)
 
 module.exports = upload

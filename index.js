@@ -26,8 +26,7 @@ app.use(bodypaser({
   formLimit: '10mb'
 }))
 app.use(cors())
-const staticPath = './static'  // 静态文件目录
-app.use(static(path.join( __dirname, staticPath)))
+app.use(static(config.static))
 
 /**
  * routers
