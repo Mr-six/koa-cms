@@ -12,6 +12,7 @@
   "author": "mrsix",
   "license": "MIT",
   "dependencies": {
+    "ali-oss": "^4.10.1",
     "joi": "^10.6.0",
     "koa": "^2.3.0",
     "koa-bodyparser": "^4.2.0",

@@ -2,7 +2,7 @@ const $    = require('../../utils')
 const Base = require('../base')
 
 const article = new Base('article', {
-  // user:      { type: Base.ObjectId(), ref: 'User' },
+  user:      { type: Base.ObjectId(), ref: 'User' },
   headerImg: String,
   title:     String,
   content:   String,

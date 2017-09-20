@@ -10,6 +10,8 @@ const upload  = require('./upload')
 
 const debug   = require('./debug')
 
+const oss     = require('./oss')
+
 /**
  * user router
  */
@@ -26,5 +28,8 @@ router.use('/article', article.routes(), article.allowedMethods())
 router.use('/upload', upload.routes(), upload.allowedMethods())
 
 router.use('/debug', debug.routes(), debug.allowedMethods())
+
+router.use('/oss', oss.routes(), oss.allowedMethods())
+
 
 module.exports = router
