@@ -3,18 +3,20 @@ module.exports = {
     accessKeySecret: 'CXB3YmCg6W22M84Dkh7OvowerLNjbg',
     bucket: 'jyy-miao',
     region: 'oss-cn-beijing',
-    role: 'miao',
+    role: 'acs:ram::1197563115958406:role/miao',
     TokenExpireTime: 1000,
     policy: {
         "Statement": [
             {
-            "Action": [
-                "oss:*"
-            ],
+            "Action": "sts:AssumeRole",
             "Effect": "Allow",
-            "Resource": ["acs:oss:*:*:*"]
+            "Principal": {
+                "RAM": [
+                "acs:ram::1197563115958406:root"
+                ]
+            }
             }
         ],
         "Version": "1"
-        },
+    }
 }

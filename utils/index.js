@@ -43,12 +43,14 @@ module.exports.result = function (ctx, data, msg, status) {
     data === null || msg) {
     status = status || 400
     redata = {
+      success: false,
       msg: data,
       data: {}
     }
   } else {
     status = status || 200
     redata = {
+      success: true,
       msg: '',
       data: data
     }
