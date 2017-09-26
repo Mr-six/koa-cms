@@ -45,4 +45,12 @@ const User = new Base('User', {
   }
 });
 
+User.methods.findByIdAndUpdate = async function (query, info) {
+  try {
+    return await User.findByIdAndUpdate(query, { $set: info })
+  } catch (e) {
+    console.error(e)
+  }
+}
+
 module.exports = User.methods
