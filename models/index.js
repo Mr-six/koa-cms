@@ -14,7 +14,7 @@ module.exports =  {
       server: { poolSize: 20 }
     }, (err) => {
       console.log(dbname)
-      $.info(dbname)
+      $.info(dbname + ' success connect')
       if (err) {
         $.error(`connect to ${dbname} error: ${err.message}`)
         process.exit(1)

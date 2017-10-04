@@ -17,6 +17,7 @@ const user  = $.joi.object().keys({
     hidden: $.joi.boolean(),
   },
   password: $.joi.string().min(8).max(30),
+  oldpasswd: $.joi.string().min(8).max(30),
   nickname: $.joi.string().min(3).max(30),
 })
 

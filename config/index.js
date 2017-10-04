@@ -1,7 +1,6 @@
 const isProd   =  process.env.NODE_ENV === 'production'
 const path     = require('path')
 const oss      = require('./oss.config')    // oss 配置
-const log      = require('./log')           // 日志配置文件
 const schema   = require('./schema')        // 验证规则
 const static   = path.join( __dirname,'../static')
 
@@ -13,7 +12,6 @@ module.exports = {
   port: isProd ? '3000' : '3000',           // 端口
   db: 'mongodb://127.0.0.1:27017/koams',    // 数据库
   dbtest: 'mongodb://127.0.0.1:27017/test', // 测试数据库
-  log,                                      // 日志配置文件
   schema,                                   // 对象验证规则
   oss,
 }

@@ -2,13 +2,14 @@ const log4js = require('koa-log4')
 const moment = require('moment')
 const crypto = require('crypto')
 const joi    = require('joi')
+const logConf = require('../config/logConf')
 
-const logger = log4js.getLogger('debug')
-logger.setLevel('auto')
+log4js.configure(logConf)
+const logger = log4js.getLogger('app')
 
 module.exports           = logger
 module.exports.joi       = joi
-module.exports.logAccess = log4js.connectLogger(log4js.getLogger('access'), {
+module.exports.logHttp = log4js.koaLogger(log4js.getLogger('http'), {
   level: 'auto'
 })
 

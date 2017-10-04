@@ -26,6 +26,11 @@ const User = new Base('User', {
   password:     String,
   permission:   { type: Number, default: 1 },
   status:       { type: Number, default: -1 },
+  zmz:          {
+    id:      String,
+    passwd:  String,
+    favList:    []
+  },
   nickname: {
     type:    String,
     index:   true,
@@ -44,13 +49,5 @@ const User = new Base('User', {
     hidden: { type: Boolean, default: false },
   }
 });
-
-User.methods.findByIdAndUpdate = async function (query, info) {
-  try {
-    return await User.findByIdAndUpdate(query, { $set: info })
-  } catch (e) {
-    console.error(e)
-  }
-}
 
 module.exports = User.methods

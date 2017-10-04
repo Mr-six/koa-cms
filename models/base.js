@@ -53,7 +53,7 @@ module.exports =  class Base {
         .limit(_count).skip(_count * _start)
         .populate(options && options.rules || rules).sort({ _index: -1 })
     } catch (e) {
-      console.error(e)
+      $.error(e)
     }
   }
 
@@ -62,7 +62,7 @@ module.exports =  class Base {
       return await this.model.findOne(query)
         .populate(options && options.rules || rules)
     } catch (e) {
-      console.error(e)
+      $.error(e)
     }
   }
 
@@ -70,7 +70,7 @@ module.exports =  class Base {
     try {
       return await this.model.create(query)
     } catch (e) {
-      console.error(e)
+      $.error(e)
     }
   }
 
@@ -78,15 +78,23 @@ module.exports =  class Base {
     try {
       return await this.model.update(query, { $set: info })
     } catch (e) {
-      console.error(e)
+      $.error(e)
+    }
+  }
+
+  async findOneAndUpdate (query, info) {
+    try {
+      return await this.model.findOneAndUpdate(query, { $set: info }, {new: true})
+    } catch (e) {
+      $.error(e)
     }
   }
 
   async delete(query) {
     try {
-      return await query.remove()
+      return await this.model.remove(query)
     } catch (e) {
-      console.error(e)
+      $.error(e)
     }
   }
 
@@ -129,6 +137,12 @@ function addMethods (_this) {
     const item = await _this.find(query)
     if (!item) { return -1 }
     return await _this.delete(item)
+  }
+
+  methods.findOneAndUpdate = async function (query, info) {
+    const item = await _this.find(query)
+    if (!item) { return -1 }
+    return await _this.findOneAndUpdate(query, info)
   }
 
   return methods

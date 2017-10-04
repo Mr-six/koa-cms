@@ -9,6 +9,7 @@ const article = new Base('article', {
   markdown:  String,
   html:      String,
   status:    String,
+  tags:      Array,
   sendAt:    { type: Date, default: Date.now },
   likes:     { type: Array, default: [] },
   _index:    { type: Number, default: 0, index: true }

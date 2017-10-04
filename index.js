@@ -4,9 +4,10 @@
 const Koa        = require('koa')
 const bodypaser  = require('koa-bodyparser')
 const cors       = require('koa-cors')
-const routers    = require('./routers')
 const static     = require('koa-static')
+const routers    = require('./routers')
 const path       = require('path')
+const onerror = require('koa-onerror')
 /**
  * app instance
  */
@@ -17,16 +18,26 @@ const app        = new Koa()
  */
 const config     = require('./config')
 
+/**
+ * http logger
+ */
+const { logHttp } = require('./utils')
+
 require('./models').connect()
 
 /**
  * middleware
  */
+onerror(app)  // 错误处理
+
+app.use(logHttp)  // 访问日志
+
+app.use(static(config.static))
+
 app.use(bodypaser({
   formLimit: '10mb'
 }))
 app.use(cors())
-app.use(static(config.static))
 
 /**
  * routers
@@ -37,5 +48,5 @@ app.use(routers.routes())
  * run and listen
  */
 app.listen(config.port, () => {
-    console.log('run at: ' + config.port)
+    console.log('run at localhost:' + config.port)
 })

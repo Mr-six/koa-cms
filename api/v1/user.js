@@ -10,7 +10,6 @@ const userApi     = new Base({
   search: 'nickname'
 })
 
-
 // 1 生成邀请码
 // 2 验证 post body 的合法性
 // 3 创建用户
@@ -38,7 +37,6 @@ userApi.methods.create = async function (ctx, next) {
   } else {
     exist  = await userModel.find({ "phone.number": value.phone.number })
   }
-  $.info(exist)
   if (exist) return $.result(ctx, 'account already exist!')
   
   // 创建账户
@@ -57,7 +55,7 @@ userApi.methods.create = async function (ctx, next) {
 // TODO
 // 密码未做加密处理
 
-userApi.methods.login    = async function (ctx, next) {
+userApi.methods.login = async function (ctx, next) {
   let body = ctx.request.body
   let userDate = {  // 提交信息
     email: {
