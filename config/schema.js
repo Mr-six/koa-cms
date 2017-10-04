@@ -17,7 +17,7 @@ const user  = $.joi.object().keys({
     hidden: $.joi.boolean(),
   },
   password: $.joi.string().min(8).max(30),
-  oldpasswd: $.joi.string().min(8).max(30),
+  newpassword: $.joi.string().min(8).max(30),
   nickname: $.joi.string().min(3).max(30),
 })
 
@@ -26,7 +26,7 @@ const user  = $.joi.object().keys({
  */
 const article = $.joi.object().keys({
   title:     $.joi.string(),
-  user:      $.joi.string(),
+  user:      $.joi.any(),
   content:   $.joi.string().empty(''),
   markdown:  $.joi.string().empty(''),
   html:      $.joi.string().empty(''),

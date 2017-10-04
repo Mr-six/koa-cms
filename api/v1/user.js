@@ -89,7 +89,7 @@ userApi.methods.login = async function (ctx, next) {
   } catch (e) {  // 生成新token
     $.info('get new token')
     token = auth.createToken({user: documents._id, permission: documents.permission})
-    documents = await userModel.findOneAndUpdate({_id: documents._id}, { token: token })
+    documents = await userModel.findOneAndUpdate({_id: documents._id}, { token: token }, {select: '-password'})
   }
   // documents = await userModel.update({_id: documents._id}, { token: token })
   if ($.isEmpty(documents)) return $.result(ctx, 'login failed')
@@ -110,16 +110,13 @@ userApi.methods.login = async function (ctx, next) {
  */
 userApi.methods.resetPassword = async function (ctx, next) {
   let body = ctx.request.body
-  const { error, value } = $.joi.validate(body, schema.user)
-  if (error) {
-    $.error(error)
-    return $.result(ctx, 'params error')
-  }
+  let {password, newpassword} = body
+  let userData = {password, newpassword}
+  const { error, value } = $.joi.validate(userData, schema.user)
+  if (ctx.user.password !== password) return $.result(ctx, 'Incorrect password!')
+  if (value.password === value.newpassword) return $.result(ctx, 'same password!')
 
-  if ($.isEmpty(body.old) || $.isEmpty(body.new)) return $.result(ctx, 'params error')
-  if (body.old === body.new) return $.result(ctx, 'same password')
-
-  let documents = await userModel.update({ _id: ctx.user._id }, { password: body.new })
+  let documents = await userModel.update({ _id: ctx.user._id }, { password: value.newpassword })
   if (documents === -1) return $.result(ctx, 'reset failed')
   $.result(ctx, documents)
 }

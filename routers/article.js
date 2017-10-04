@@ -1,6 +1,7 @@
 const Router       = require('koa-router')
-const {articleApi}  = require('../api').v1
-const article         = new Router()
+const {authToken}  = require('../utils/auth')
+const {articleApi} = require('../api').v1
+const article      = new Router()
 
 // {
 //     "title": "test",
@@ -17,7 +18,7 @@ article.get('/', (ctx) => {
 /**
  * 创建
  */
-article.post('/create', articleApi.create)
+article.post('/create', authToken, articleApi.create)
 
 /**
  * 查找
@@ -27,6 +28,11 @@ article.get('/all', articleApi.all)
 /**
  * 修改
  */
-// article.post('/resetPassword', articleApi.resetPassword)
+article.post('/update', articleApi.update)
+
+/**
+ * 删除
+ */
+article.post('/delete', authToken, articleApi.delete)
 
 module.exports = article

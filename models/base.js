@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 const $        = require('../utils')
 
-const rules  = [{ path: 'user', select: '-token -openid -password'}]
+const rules  = [{ path: 'user', select: 'nickname'}]
 
 
 // baseModel
@@ -45,12 +45,12 @@ module.exports =  class Base {
   }
 
   // try catch methods
-  async all(query, start, options) {
-    const _count = 20
+  async all(query, start, limit, options) {
+    const _limit = limit || 20
     const _start = start || 0
     try {
       return await this.model.find(query)
-        .limit(_count).skip(_count * _start)
+        .limit(_limit).skip(_limit * _start)
         .populate(options && options.rules || rules).sort({ _index: -1 })
     } catch (e) {
       $.error(e)
@@ -92,7 +92,7 @@ module.exports =  class Base {
 
   async delete(query) {
     try {
-      return await this.model.remove(query)
+      return await query.remove()
     } catch (e) {
       $.error(e)
     }

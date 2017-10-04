@@ -22,15 +22,15 @@ function createToken (json) {
 }
 
 // 验证token的正确性 中间价形式
- async function authToken (ctx, next) {
-  const token = ctx.req.body.token || null
+async function authToken (ctx, next) {
+  const token = ctx.request.body.token || null
   if ($.isEmpty(token)) {return $.result(ctx, 'token error')}
   try {  // 解析token
     const decode = await tokenPromise(token)
-    const user = await userModel.find({'_id': decode.user})
+    const user = await userModel.find({'_id': decode.user}, {select: '-password'})
     if (user) {  // 解析结果
       ctx.user = user
-      next()
+      return next()
     } else {
       $.result(ctx, 'token error')
     }
