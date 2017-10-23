@@ -1,7 +1,7 @@
 const $    = require('../../utils')
 const Base = require('../base')
 
-const article = new Base('article', {
+const Article = new Base('Article', {
   user:      { type: Base.ObjectId(), ref: 'User' },
   headerImg: String,
   title:     String,
@@ -15,11 +15,11 @@ const article = new Base('article', {
   _index:    { type: Number, default: 0, index: true }
 })
 
-article.methods.create = async function (query) {
+Article.methods.create = async function (query) {
   query._index = await this.count({}) + 1
-  return await article.create(query)
+  return await Article.create(query)
 }
 
-module.exports =  article.methods
+module.exports =  Article.methods
 
 

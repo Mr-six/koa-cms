@@ -1,5 +1,6 @@
 // api基础类
-const $        = require('../../utils')
+const $ = require('../../utils')
+const {limitDb}  = require('../../config')
 
 module.exports =  class Base {
   constructor(options) {
@@ -11,38 +12,43 @@ module.exports =  class Base {
 
 function addMethods(_this) {
   let methods = {}
-  methods.find = async function (ctx, next) {
+
+  methods.count = async function (ctx) {
+    let query = ctx.query
+    $.result(ctx, await _this.model.findById(ctx.params.id))
+  }
+  methods.findById = async function (ctx) {
     $.result(ctx, await _this.model.findById(ctx.params.id))
   }
 
-  methods.all = async function (ctx, next) {
-    let query = {}, search = ctx.query.search
+  methods.all = async function (ctx) {
+    let query = {}
+    let q = ctx.query
+    let {search, start, limit, options} = q
+    start = Number(start) || 0
+    limit = Number(limit) || limitDb
     if (!$.isEmpty(search)) query[_this.search] = new RegExp(search)
-    $.result(ctx, await _this.model.all(query, ctx.query.start))
+    $.result(ctx, await _this.model.all(query, start, limit, options))
   }
 
-  methods.create = async function (ctx, next) {
+  methods.create = async function (ctx) {
+    let query = ctx.request.body
     $.result(ctx, await _this.model.create(query))
   }
 
-  methods.update = async function (ctx, next) {
-    let exist = await _this.model.find({ "_id": ctx.params.id })
-    if (exist.openid === '123454321') {
-       $.result(ctx, 'this is test account')
-       return
-    }
-    let documents = await _this.model.update({ "_id": ctx.params.id }, req.body)
+  methods.update = async function (ctx) {
+    let documents = await _this.model.update({ "_id": ctx.params.id }, ctx.request.body)
     if (documents === -1) $.result(ctx, 'update failed')
     else $.result(ctx, documents)
   }
 
-  methods.delete = async function (ctx, next) {
+  methods.delete = async function (ctx) {
     let documents = await _this.model.delete({ "_id": ctx.params.id })
     if (documents === -1) $.result(ctx, 'delete failed')
     else $.result(ctx, documents)
   }
 
-  // methods.addSchedule = async function (ctx, next) {
+  // methods.addSchedule = async function (ctx) {
   //   let params = Object.assign({user: ctx.user._id}, ctx.body)
 
   //   if (params.status !== 'schedule') { params.sendAt = Date.now() }

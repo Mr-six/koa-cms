@@ -1,0 +1,17 @@
+{
+    "apps" : [
+        {
+          "name":               "mrsix",
+          "max_memory_restart": "300M",
+          "script":             "index.js",
+          "log_date_format":    "YYYY-MM-DD HH:mm Z",
+          "out_file":           "logs/pm2out.log",
+          "error_file":         "logs/pm2error.log",
+          "instances":          1,
+          "exec_mode":          "fork",
+          "env":                {
+              "NODE_ENV": "production"
+          }
+        }
+      ]
+}

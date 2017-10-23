@@ -1,0 +1,52 @@
+# 权限配置
+base: &base
+  # article
+  /article#POST: allow
+  /article#GET: allow
+  /article/:id#GET: allow
+  /article/:id#PATCH: allow
+  /article/:id#DELETE: allow
+
+  # user
+  /user/logi#POST: allow
+  /user/signup#POST: allow
+  /user/resetPassword#PUT: allow
+  /user/accout/:id#GET: allow
+  /user/accout/:id#PATCH: allow
+
+
+visitor: &visitor
+
+user: &user
+  <<: *base
+
+editor: &editor
+  <<: *base
+
+
+runner: &runner
+  <<: *base
+
+
+admin: &admin
+  # user
+  /user/account#GET: allow
+  /user/accout/:id#DELETE: allow
+
+  # upload
+  /oss#GET: allow
+  /qiniu#GET: allow
+  /upload#post: allow
+
+  <<: *base
+  <<: *user
+  <<: *runner
+  <<: *editor
+  <<: *admin
+
+
+dev: &dev
+  <<: *visitor
+  <<: *user
+  <<: *editor
+  <<: *admin

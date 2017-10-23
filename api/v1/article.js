@@ -1,91 +1,68 @@
-const {articleModel} = require('../../models').v1
-const $         = require('../../utils')
-const Base      = require('./base')
-const {schema, limitDb}  = require('../../config')
+const { articleModel } = require('../../models').v1
+const $                = require('../../utils')
+const Base             = require('./base')
+const {schema}         = require('../../config')
 
 let ArticleAPI = new Base({
   model: articleModel,
   search: 'title',
 })
 
-// 文章查询
-ArticleAPI.methods.all = async function (ctx) {
-  let q = ctx.query
-  let query = {}
-  let {search, start, limit} = q
-  if (!$.isEmpty(search)) query = { 'title': new RegExp(search) }
-  start = Number(start) || 0
-  limit = Number(limit) || limitDb
-
-  let documents = await articleModel.all(query, start, limit)
-  $.result(ctx, documents)
-}
-
-// ArticleAPI.methods.create = ArticleAPI.methods.addSchedule
-
-// 更改索引 (暂留)
+/**
+ * 更改索引
+ * post 参数
+ * @params {Array} items 所需要更改_index的元素
+ * 如：
+ * items = [
+ *  {
+ *    id: '文章id',
+ *    index: '更新后的index值'
+ *  }
+ * ]
+ */
 ArticleAPI.methods.updateIndex = async function (ctx) {
   let body = ctx.request.body
-  if (body.items.length === 0) return $.result(ctx, {})
-  else req.body.items.forEach(async (el, index) => {
+  if (body.items.length === 0) $.result(ctx, {})
+  else body.items.forEach(async (el, index) => {
     let documents = await articleModel.update({
       _id: el.id
     }, { _index: el.index })
-    if (index === req.body.items.length - 1) { return $.result(ctx, {}) }
+    if (index === body.items.length - 1) { return $.result(ctx, {}) }
   })
 }
 
-// 文章创建
+/**
+ * 文章创建
+ * post 参数 详见 article.md
+ */
 ArticleAPI.methods.create = async function (ctx) {
   let body = ctx.request.body
-  body.user = ctx.user._id
-  $.info(typeof body.user)
-  delete body.token  // 删除 token
+  body.user = ctx.user.id  // 关联用户 id
   const { error, value } = $.joi.validate(body, schema.article)  // 验证body对象
-  $.debug(error)
-  if (error) return $.result(ctx, 'params error')
-  
-  const query = Object.assign({}, body)
-  // $.info(query)
-  let documents = await articleModel.create(query)
-  // $.debug(article)
+  if (error) {
+    $.error(error)
+    return $.result(ctx, 'params error')
+  }
+  let documents = await articleModel.create(value)
   $.result(ctx, documents)
 }
 
-// {
-//   "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiNTlkMzQyNWFhYzk2MDgxZmU2MTRkNDhmIiwicGVybWlzc2lvbiI6MSwiaWF0IjoxNTA3MDE3MzA2LCJleHAiOjE1MDc2MjIxMDZ9.LE5i2Dpr29UYeOMUIXfbC0v9IXUh3JheLDm2HGlxeiQ",
-//   "id": "59d47855fb7ca417e2dbdf79",
-//   "data": {
-//     "title": "更新测试",    
-//   }
-// }
-// 文章更新
-ArticleAPI.methods.update = async function (ctx) {
-  let body = ctx.request.body
-  let id = body.id
-  let data = body.data
-  const { error, value } = $.joi.validate(data, schema.article)  // 验证对象
-  // $.debug(error)
-  if (error) return $.result(ctx, 'params error')
-  
-  const info = Object.assign({}, value)
-  let documents = await articleModel.findOneAndUpdate({_id: id}, info)
-  // $.info(documents)
-  if (documents === -1) $.result(ctx, 'update failed')
-  // $.debug(article)
-  $.result(ctx, documents)
-}
 
 /**
- * 文章删除
+ * 文章更新
  */
-ArticleAPI.methods.delete = async function (ctx) {
+ArticleAPI.methods.update = async function (ctx) {
   let body = ctx.request.body
-  let {id} = body
-  // documents && documents.job && documents.job.cancel()
-  let documents = await articleModel.delete({ "_id": id })
-  if (documents === -1) $.result(ctx, 'delete failed')
-  $.result(ctx, documents)
+  let userId = ctx.user.id  // 用户id
+  const { error, value } = $.joi.validate(body, schema.article)  // 验证对象
+  if (error) {
+    $.error(error)
+    return $.result(ctx, 'params error')
+  }
+  if (userId !== body.user) return $.result(ctx, 'Not Allowed', 405)  // 禁止更改非本人文章
+  let res = await articleModel.findOneAndUpdate({ _id: ctx.params.id }, value)
+  if (res === -1) $.result(ctx, 'update failed')
+  else $.result(ctx, res)
 }
 
 module.exports = ArticleAPI.methods
