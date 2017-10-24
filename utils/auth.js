@@ -22,7 +22,10 @@ try {
  * @param {Array} permission 用户权限
  */
 function permissionAllow (ctx, permission) {
-  let url = `${ctx.path}#${ctx.method}`
+  let params = ctx.params
+  let url
+  if (!$.isEmpty(params)) url = `${ctx.matched[0].path}#${ctx.method}`
+  else url = `${ctx.path}#${ctx.method}`
   let pmStr = permission.toString()
   let userPM = {}  // 当前用户权限列表
   if ($.isEmpty(pmCache[pmStr])) {  // 权限查找
