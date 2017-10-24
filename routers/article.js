@@ -6,11 +6,11 @@ const article      = new Router()
 /**
  * article router
  */
-article.get('/',                  articleApi.all)       // 查找
-       .post('/',      authToken, articleApi.create)    // 新建
+article.get('/',                         articleApi.all)       // 查找
+       .post('/',             authToken, articleApi.create)    // 新建
 
-article.get('/:id',               articleApi.findById)  // 查看
-       .patch('/:id',  authToken, articleApi.update)    // 更新
-       .delete('/:id', authToken, articleApi.delete)    // 删除
+article.get('/detail/:id',               articleApi.findById)  // 查看
+       .patch('/detail/:id',  authToken, articleApi.update)    // 更新
+       .delete('/detail/:id', authToken, articleApi.delete)    // 删除
        
 module.exports = article

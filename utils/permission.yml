@@ -1,11 +1,11 @@
 # 权限配置
 base: &base
   # article
-  /article#POST: allow
   /article#GET: allow
-  /article/:id#GET: allow
-  /article/:id#PATCH: allow
-  /article/:id#DELETE: allow
+  /article#POST: allow
+  /article/detail/:id#GET: allow
+  /article/detail/:id#PATCH: allow
+  /article/detail/:id#DELETE: allow
 
   # user
   /user/logi#POST: allow
