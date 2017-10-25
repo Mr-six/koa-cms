@@ -15,7 +15,7 @@ function addMethods(_this) {
 
   methods.count = async function (ctx) {
     let query = ctx.query
-    $.result(ctx, await _this.model.findById(ctx.params.id))
+    $.result(ctx, await _this.model.count(query))
   }
   methods.findById = async function (ctx) {
     $.result(ctx, await _this.model.findById(ctx.params.id))
