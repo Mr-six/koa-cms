@@ -36,11 +36,12 @@
 返回数据：
 ```
 {
-    "msg": "",
+    "success": true,
     "data": {
-        "n": 1,
-        "nModified": 1,
-        "ok": 1
+        "_id": "59e84714670a363dceae0b6a",
+        "nickname": "管理员1",
+        "headimgurl": "http://cdn.mrsix.top/img/default.png",
+        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiNTllNWUwMWQzNDlmMDg0MTFjYjllYmZhIiwicGVybWlzc2lvbiI6MSwiaWF0IjoxNTA4MjM3MzQxLCJleHAiOjE1MDg4NDIxNDF9.BR7EJwYd1XbOgQPBvg62C6qHhDLbn6zBJP1izvqy0yk"
     }
 }
 ```

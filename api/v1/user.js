@@ -49,9 +49,12 @@ userApi.methods.create = async function (ctx) {
   if (value.email) {  // 发送激活邮件
     let res = await tool.veryfyCode.sendEmailCode(value.email, user._id, 7200)
   }
-  user           = await userModel.update({_id: user._id}, { token: token })
-
-  $.result(ctx, user)
+  user = await userModel.findOneAndUpdate({_id: user._id}, { token: token })
+  if ($.isEmpty(user)) $.result(ctx, '这册失败, 未知原因', 507)
+  else {
+    let {_id, nickname, headimgurl, token} = user
+    $.result(ctx, {_id, nickname, headimgurl, token})
+  }
 }
 
 
