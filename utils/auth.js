@@ -62,9 +62,10 @@ function tokenPromise (token) {
  * json为对象结构
  * 包含 用户 _id 和 permission 权限值
  * @param {Object} json 待加密字段
+ * @param {Number} expire 过期时间
  */
-function createToken (json) {
-  const token = jwt.sign(json, config.secret, { expiresIn: config.tokenExpires})
+function createToken (json, expire = config.tokenExpires) {
+  const token = jwt.sign(json, config.secret, { expiresIn: expire})
   return token;
 }
 
